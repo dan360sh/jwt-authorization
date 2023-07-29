@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
+import { HttpService } from "@nestjs/axios";
 @Injectable()
 export class JwtRsaService {
-    private privateKey: string = "";
-    private publicKey: string = "";
+    constructor(private readonly httpService: HttpService) {
+    }
+    private privateKey: string | null = null;
+    public publicKey: string = "";
+
 
     setRsaKeys(publicKey: string, privateKey: string) {
         this.privateKey = privateKey;
@@ -53,6 +57,14 @@ export class JwtRsaService {
             return true;
         }
         return false;
+    }
+
+    public loadPublicToken(): void{
+        if(this.privateKey === null && false){
+            this.httpService.get("http://localhost:3000/auth/get-public-token").subscribe((data) => {
+                this.publicKey = data.data;
+            })
+        }
     }
 
     private base64urlEncode(str: string): string {

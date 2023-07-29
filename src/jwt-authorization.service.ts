@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
-
-import { HttpService } from "@nestjs/axios";
+import { JwtRsaService } from "@app/jwt-authorization/services/jwt-rsa.service";
 
 @Injectable()
 export class JwtAuthorizationService {
-  constructor(private readonly httpService: HttpService) {
-    console.log("XXXXX1");
-
-    this.httpService.get("https://www.google.ru/").subscribe((data) => {
-      console.log(data);
-    })
+  constructor(
+    private readonly jwtRsaService: JwtRsaService
+  ) {
+    jwtRsaService.loadPublicToken();
   }
 }
